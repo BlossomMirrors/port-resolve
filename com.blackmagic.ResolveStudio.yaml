@@ -69,7 +69,7 @@ modules:
     subdir: runtimes
     config-opts:
       - -DCMAKE_BUILD_TYPE=Release
-      - -DLLVM_ENABLE_RUNTIMES=libcxx;libcxxabi
+      - -DLLVM_ENABLE_RUNTIMES=libcxx;libcxxabi;libunwind
       - -DLLVM_TARGETS_TO_BUILD=X86
       - -Wno-dev
     sources:
