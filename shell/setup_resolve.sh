@@ -72,6 +72,14 @@ rm squashfs-root/libs/libgobject*
 # Can we use system Qt5? Not yet.
 # rm squashfs-root/libs/libQt5*
 cp -rp squashfs-root/libs ${PREFIX}/
+# libProResRAW.so exports _ZNSt10filesystem7__cxx114path14_M_split_cmptsEv globally,
+# interposing Rusticl's libstdc++ calls and causing SIGSEGV on timeline use.
+# Build a preload shim that intercepts the symbol and forwards to the real libstdc++.
+# Set STV_HIDDEN on all exported C++ stdlib symbols in libProResRAW.so.
+# This prevents them from being picked up by the dynamic linker when other
+# libraries (Rusticl) look up the same symbols, while libProResRAW.so itself
+# still uses its own definitions via direct/local binding.
+python3 ./patch_proresraw.py "${PREFIX}/libs/libProResRAW.so"
 
 cp -rp squashfs-root/LUT ${PREFIX}/
 cp -rp squashfs-root/Onboarding ${PREFIX}/

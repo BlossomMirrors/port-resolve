@@ -12,23 +12,16 @@ finish-args:
   - --socket=pulseaudio
   - --socket=x11
   - --device=dri
-  - --filesystem=xdg-desktop
-  - --filesystem=xdg-documents
-  - --filesystem=xdg-download
-  - --filesystem=xdg-music
-  - --filesystem=xdg-pictures
-  - --filesystem=xdg-public-share
-  - --filesystem=xdg-videos
+  - --filesystem=home
   - --filesystem=/media
   - --filesystem=/run/media
-  - --filesystem=xdg-run/gvfs
   - --filesystem=/mnt
   - --persist=.local/share/DaVinciResolve
   - --persist=Videos/CacheClip
   - --persist=Videos/.gallery
   - --persist=Documents/BlackmagicDesign
   - --env=LD_PRELOAD=/lib/x86_64-linux-gnu/libglib-2.0.so.0 /lib/x86_64-linux-gnu/libgio-2.0.so.0 /lib/x86_64-linux-gnu/libgmodule-2.0.so.0 /lib/x86_64-linux-gnu/libgobject-2.0.so.0
-  - --env=RUSTICL_ENABLE=radeonsi,iris,nouveau
+  #- --env=RUSTICL_ENABLE=radeonsi,iris,nouveau
 #  - --env=OCL_ICD_VENDORS=rusticl.icd
 
 command: /app/bin/resolve.sh
@@ -78,6 +71,8 @@ modules:
         ./run_complete_installation.sh
     sources:
       - type: file
+        path: python/patch_proresraw.py
+      - type: file
         path: python/build_metainfo.py
       - type: file
         path: python/main.py
@@ -97,3 +92,5 @@ modules:
         path: requirements.txt
       - type: file
         path: logo.png
+      - type: file
+        path: resolve.zip

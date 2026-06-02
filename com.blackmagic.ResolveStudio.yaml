@@ -21,13 +21,7 @@ finish-args:
   - --device=dri
   - --device=usb
   - --usb=vnd:096e
-  - --filesystem=xdg-desktop
-  - --filesystem=xdg-documents
-  - --filesystem=xdg-download
-  - --filesystem=xdg-music
-  - --filesystem=xdg-pictures
-  - --filesystem=xdg-public-share
-  - --filesystem=xdg-videos
+  - --filesystem=home
   - --filesystem=/media
   - --filesystem=/run/media
   - --filesystem=/mnt
@@ -37,7 +31,7 @@ finish-args:
   - --persist=Documents/BlackmagicDesign
   # https://www.reddit.com/r/Fedora/comments/12z32r1/davinci_resolve_libpango_undefined_symbol_g/
   # - --env=LD_PRELOAD=/lib/x86_64-linux-gnu/libglib-2.0.so.0 /lib/x86_64-linux-gnu/libgio-2.0.so.0 /lib/x86_64-linux-gnu/libgmodule-2.0.so.0 /lib/x86_64-linux-gnu/libgobject-2.0.so.0
-  - --env=RUSTICL_ENABLE=radeonsi,iris,nouveau
+  #- --env=RUSTICL_ENABLE=radeonsi,iris,nouveau
 #  - --env=OCL_ICD_VENDORS=rusticl.icd
 
 command: /app/bin/resolve.sh
@@ -88,6 +82,8 @@ modules:
         ./run_complete_installation.sh --studio
     sources:
       - type: file
+        path: python/patch_proresraw.py
+      - type: file
         path: python/build_metainfo.py
       - type: file
         path: python/main.py
@@ -107,3 +103,5 @@ modules:
         path: requirements.txt
       - type: file
         path: logo.png
+      - type: file
+        path: resolve.zip

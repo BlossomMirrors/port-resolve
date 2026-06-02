@@ -1,6 +1,11 @@
 .actrc
 .build-dir
+build-dir
 .idea
 venv
+.dlenv
 .repo
+repo
 .flatpak-builder
+__pycache__
+resolve.zip
