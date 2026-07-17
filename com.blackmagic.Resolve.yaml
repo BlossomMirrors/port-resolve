@@ -6,6 +6,13 @@ app-id: com.blackmagic.Resolve
 runtime: org.freedesktop.Platform
 runtime-version: &runtime-version "24.08"
 sdk: org.freedesktop.Sdk
+add-extensions:
+  com.blackmagic.Resolve.ioplugin:
+    version: "1.0"
+    directory: IOPlugins
+    subdirectories: true
+    no-autodownload: true
+    autodelete: true
 finish-args:
   - --share=ipc
   - --share=network
@@ -86,6 +93,10 @@ modules:
         path: shell/setup_directories.sh
       - type: file
         path: shell/resolve.sh
+      - type: file
+        path: shell/arc_compat_watcher.sh
+      - type: file
+        path: shell/convert_for_resolve.sh
       - type: file
         path: run_complete_installation.sh
       - type: file

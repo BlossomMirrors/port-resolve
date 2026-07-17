@@ -10,4 +10,12 @@ export QT_DEBUG_PLUGINS=1
 mkdir -p "${BMD_RESOLVE_LOGS_DIR}"
 LOG="${BMD_RESOLVE_LOGS_DIR}/resolve-$(date +%Y%m%d-%H%M%S).log"
 cd "${BMD_RESOLVE_LOGS_DIR}"
+
+# "Arc Compat": surfaces a notification when Resolve logs an unsupported-codec
+# error, since those otherwise fail completely silently. Tied to this
+# process's lifetime.
+/app/bin/arc-compat-watcher &
+ARC_COMPAT_PID=$!
+trap 'kill "${ARC_COMPAT_PID}" 2>/dev/null' EXIT
+
 /app/bin/resolve "$@" 2>&1 | tee "$LOG"

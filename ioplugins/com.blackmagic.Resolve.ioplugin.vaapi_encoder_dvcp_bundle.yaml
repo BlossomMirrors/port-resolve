@@ -1,0 +1,29 @@
+####
+# Flatpak extension: vaapi_encoder.dvcp.bundle IOPlugin for DaVinci Resolve.
+# Free community plugin from the Nobara project, see:
+# https://wiki.nobaraproject.org/general-usage/additional-software/davinci-resolve
+#
+# Dots aren't allowed in Flatpak extension IDs (they derive FLATPAK_DEST), so
+# the id uses "_dvcp_bundle" and shell/build_ioplugins.sh renames it back to
+# ".dvcp.bundle" in the built metadata before export, matching what Resolve
+# expects to find under /app/IOPlugins.
+####
+id: com.blackmagic.Resolve.ioplugin.vaapi_encoder_dvcp_bundle
+branch: '1.0'
+runtime: com.blackmagic.Resolve
+runtime-version: &runtime-version 'master'
+sdk: org.freedesktop.Sdk//24.08
+build-extension: true
+build-options:
+  prefix: /app/IOPlugins/vaapi_encoder.dvcp.bundle
+  prepend-path: /app/IOPlugins/vaapi_encoder.dvcp.bundle/Contents/Linux-x86-64/
+modules:
+  - name: vaapi_encoder.dvcp.bundle
+    buildsystem: simple
+    build-commands:
+      - mkdir -p ${FLATPAK_DEST}/Contents/Linux-x86-64/
+      - install -Dm755 vaapi_encoder.dvcp.bundle/Contents/Linux-x86-64/vaapi_encoder.dvcp -t ${FLATPAK_DEST}/Contents/Linux-x86-64
+    sources:
+      - type: archive
+        url: https://devbuilds.nobaraproject.org/DR-vaapi.tar.gz
+        sha256: 369086338dbc7b95a326eab8f13907ef4957c1246cd02a202b65dbd9e0bd4e41

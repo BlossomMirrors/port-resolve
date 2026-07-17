@@ -1,0 +1,29 @@
+####
+# Flatpak extension: x264_encoder.dvcp.bundle IOPlugin for DaVinci Resolve.
+# Free community plugin from the Nobara project, see:
+# https://wiki.nobaraproject.org/general-usage/additional-software/davinci-resolve
+#
+# Dots aren't allowed in Flatpak extension IDs (they derive FLATPAK_DEST), so
+# the id uses "_dvcp_bundle" and shell/build_ioplugins.sh renames it back to
+# ".dvcp.bundle" in the built metadata before export, matching what Resolve
+# expects to find under /app/IOPlugins.
+####
+id: com.blackmagic.ResolveStudio.ioplugin.x264_encoder_dvcp_bundle
+branch: '1.0'
+runtime: com.blackmagic.ResolveStudio
+runtime-version: &runtime-version 'master'
+sdk: org.freedesktop.Sdk//24.08
+build-extension: true
+build-options:
+  prefix: /app/IOPlugins/x264_encoder.dvcp.bundle
+  prepend-path: /app/IOPlugins/x264_encoder.dvcp.bundle/Contents/Linux-x86-64/
+modules:
+  - name: x264_encoder.dvcp.bundle
+    buildsystem: simple
+    build-commands:
+      - mkdir -p ${FLATPAK_DEST}/Contents/Linux-x86-64/
+      - install -Dm755 x264_encoder.dvcp.bundle/Contents/Linux-x86-64/x264_encoder.dvcp -t ${FLATPAK_DEST}/Contents/Linux-x86-64
+    sources:
+      - type: archive
+        url: https://devbuilds.nobaraproject.org/DR-x264-x265-prores.tar.gz
+        sha256: a4d06ef07a3f2653b67ad172fc36982610d9e39cfb579534394f5eec6bd2cc33

@@ -9,3 +9,5 @@ python3 ./main.py $1
 chmod +x ./DaVinci_Resolve_*_Linux.run
 ./setup_resolve.sh $1
 install -Dm755 resolve.sh /app/bin/resolve.sh
+install -Dm755 arc_compat_watcher.sh /app/bin/arc-compat-watcher
+install -Dm755 convert_for_resolve.sh /app/bin/convert-for-resolve

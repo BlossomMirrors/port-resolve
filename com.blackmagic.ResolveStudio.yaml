@@ -98,6 +98,10 @@ modules:
       - type: file
         path: shell/resolve.sh
       - type: file
+        path: shell/arc_compat_watcher.sh
+      - type: file
+        path: shell/convert_for_resolve.sh
+      - type: file
         path: run_complete_installation.sh
       - type: file
         path: requirements.txt

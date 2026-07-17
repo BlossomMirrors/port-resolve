@@ -6,6 +6,8 @@ venv
 .dlenv
 .repo
 repo
+.ioplugin-build-dir
+.ioplugin-repo
 .flatpak-builder
 __pycache__
 resolve.zip
