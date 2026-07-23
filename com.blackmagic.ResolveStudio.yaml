@@ -77,6 +77,10 @@ modules:
         tag: llvmorg-19.1.7
   - name: resolve
     buildsystem: simple
+    # These are prebuilt proprietary vendor binaries with no matching source,
+    # so stripping/compressing debuginfo for them is pure wasted memory and
+    # CPU on every build.
+    no-debuginfo: true
     build-options:
       build-args:
         - --share=network
