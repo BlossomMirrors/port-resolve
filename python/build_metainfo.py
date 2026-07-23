@@ -5,6 +5,21 @@ import re
 import requests
 from resolve_download import Version
 
+_RELATIVE_DAYS_AGO_RE = re.compile(r"^(\d+)\s+days?\s+ago$", re.IGNORECASE)
+
+
+def _parse_download_date(raw: str) -> datetime.date:
+    today = datetime.date.today()
+    normalized = raw.strip().lower()
+    if normalized == "today":
+        return today
+    if normalized == "yesterday":
+        return today - datetime.timedelta(days=1)
+    relative = _RELATIVE_DAYS_AGO_RE.match(normalized)
+    if relative:
+        return today - datetime.timedelta(days=int(relative.group(1)))
+    return datetime.datetime.strptime(raw, "%d %b %Y").date()
+
 
 def build_metainfo(app_id: str, app_description: str, app_tag: str):
     response = requests.get(
@@ -33,9 +48,7 @@ def build_metainfo(app_id: str, app_description: str, app_tag: str):
             build=linux["releaseId"],
             beta=-1 if beta is None or beta.group(1) == "" else beta.group(1),
         )
-        date = datetime.datetime.strptime(download["date"], "%d %b %Y").strftime(
-            "%Y-%m-%d"
-        )
+        date = _parse_download_date(download["date"]).strftime("%Y-%m-%d")
 
         if idx == 0 or latest_description == "":
             latest_description = description

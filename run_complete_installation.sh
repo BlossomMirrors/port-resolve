@@ -1,4 +1,5 @@
 #!/bin/sh
+set -e
 echo "Setting up python build environment..."
 python -m venv venv
 source ./venv/bin/activate

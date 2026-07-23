@@ -12,7 +12,10 @@
 ####
 LOG="${BMD_RESOLVE_LOGS_DIR:-${XDG_DATA_HOME}/logs}/ResolveDebug.txt"
 DOC="https://help.blossomos.org/help/user/resolve"
-CONVERT="/app/bin/convert-for-resolve"
+# /app/bin/convert-for-resolve only exists inside this sandbox, so the fix
+# shown to the user has to be the full host-side invocation, not the bare path.
+APP_ID="$(sed -n 's/^name=//p' /.flatpak-info)"
+CONVERT="flatpak run --command=convert-for-resolve ${APP_ID}"
 
 if [ ! -e "$LOG" ]; then
     while [ ! -e "$LOG" ]; do sleep 1; done

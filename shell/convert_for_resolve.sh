@@ -28,8 +28,11 @@ for f in *"$EXT"; do
     if [[ "$vcodec" =~ $SUPPORTED_VIDEO_RE ]]; then
         vopts=(-c:v copy)
     else
-        echo "${f}: re-encoding video (${vcodec} -> prores)"
-        vopts=(-c:v prores_ks -profile:v 3)
+        # The freedesktop.org runtime's ffmpeg build excludes ProRes encoders
+        # (patent-encumbered), so re-encode to DNxHR instead, which ffmpeg
+        # does ship and which Resolve treats as natively supported.
+        echo "${f}: re-encoding video (${vcodec} -> dnxhr)"
+        vopts=(-c:v dnxhd -profile:v dnxhr_hq -pix_fmt yuv422p)
     fi
 
     if [[ "$acodec" == pcm_* ]]; then

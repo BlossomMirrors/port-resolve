@@ -28,6 +28,10 @@ finish-args:
   - --persist=Videos/.gallery
   - --persist=Documents/BlackmagicDesign
   - --env=LD_PRELOAD=/lib/x86_64-linux-gnu/libglib-2.0.so.0 /lib/x86_64-linux-gnu/libgio-2.0.so.0 /lib/x86_64-linux-gnu/libgmodule-2.0.so.0 /lib/x86_64-linux-gnu/libgobject-2.0.so.0
+  # Without this, glXSwapBuffers can stall forever waiting on a DRI3/Present
+  # vblank event under Xwayland, freezing the whole app (main thread stuck in
+  # xcb_wait_for_special_event) until something force-kills it.
+  - --env=vblank_mode=0
   #- --env=RUSTICL_ENABLE=radeonsi,iris,nouveau
 #  - --env=OCL_ICD_VENDORS=rusticl.icd
 
