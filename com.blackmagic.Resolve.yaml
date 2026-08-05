@@ -32,6 +32,12 @@ finish-args:
   # vblank event under Xwayland, freezing the whole app (main thread stuck in
   # xcb_wait_for_special_event) until something force-kills it.
   - --env=vblank_mode=0
+  # Fusion's Text+/Titles font list scans Global.Paths.Map.Fonts, which
+  # defaults to $(FUSION_FONTS);/usr/share/fonts and never consults
+  # fontconfig, so it only ever saw the runtime's stock fonts at
+  # /usr/share/fonts instead of the host's. Point it at the host font
+  # bridges instead.
+  - --env=FUSION_FONTS=/run/host/fonts;/run/host/user-fonts
   #- --env=RUSTICL_ENABLE=radeonsi,iris,nouveau
 #  - --env=OCL_ICD_VENDORS=rusticl.icd
 
