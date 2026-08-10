@@ -6,6 +6,16 @@ import requests
 from resolve_download import Version
 
 _RELATIVE_DAYS_AGO_RE = re.compile(r"^(\d+)\s+days?\s+ago$", re.IGNORECASE)
+_LAST_WEEKDAY_RE = re.compile(r"^last\s+(\w+)$", re.IGNORECASE)
+_WEEKDAYS = [
+    "monday",
+    "tuesday",
+    "wednesday",
+    "thursday",
+    "friday",
+    "saturday",
+    "sunday",
+]
 
 
 def _parse_download_date(raw: str) -> datetime.date:
@@ -18,6 +28,11 @@ def _parse_download_date(raw: str) -> datetime.date:
     relative = _RELATIVE_DAYS_AGO_RE.match(normalized)
     if relative:
         return today - datetime.timedelta(days=int(relative.group(1)))
+    last_weekday = _LAST_WEEKDAY_RE.match(normalized)
+    if last_weekday and last_weekday.group(1) in _WEEKDAYS:
+        target = _WEEKDAYS.index(last_weekday.group(1))
+        days_since = (today.weekday() - target) % 7 or 7
+        return today - datetime.timedelta(days=days_since)
     return datetime.datetime.strptime(raw, "%d %b %Y").date()
 
 
