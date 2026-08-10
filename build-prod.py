@@ -10,7 +10,8 @@ ROOT = Path(__file__).parent.resolve()
 sys.path.insert(0, str(ROOT / "python"))
 os.chdir(ROOT)
 
-REPO = "/srv/repos/flatpak"
+REPO = ROOT / "build-repo"
+BRANCH = "master"
 REFER_ID = "77ef91f67a9e411bbbe299e595b4cfcc"
 
 
@@ -32,17 +33,6 @@ def ensure_requests():
         )
     python = str(venv / "bin" / "python3")
     os.execv(python, [python] + sys.argv)
-
-
-def gpg_key_id():
-    out = subprocess.run(
-        ["gpg", "--list-secret-keys", "--keyid-format", "LONG"],
-        check=True, capture_output=True, text=True,
-    ).stdout
-    for line in out.splitlines():
-        if line.strip().startswith("sec"):
-            return line.split()[1].split("/")[1]
-    raise RuntimeError("No secret GPG key found")
 
 
 def ensure_zip(studio: bool):
@@ -76,18 +66,23 @@ def main():
 
     ensure_zip(studio)
 
-    manifest = ROOT / (
-        "com.blackmagic.ResolveStudio.yaml" if studio else "com.blackmagic.Resolve.yaml"
-    )
+    app_id = "com.blackmagic.ResolveStudio" if studio else "com.blackmagic.Resolve"
+    manifest = ROOT / f"{app_id}.yaml"
     run(
         "flatpak-builder",
         "--install-deps-from=flathub",
         "--force-clean",
-        f"--gpg-sign={gpg_key_id()}",
         f"--repo={REPO}",
         "build-dir",
         str(manifest),
     )
+
+    bundle = ROOT / f"{app_id}.flatpak"
+    run(
+        "flatpak", "build-bundle",
+        str(REPO), str(bundle), app_id, BRANCH,
+    )
+    print(f"Bundle written to {bundle}")
 
 
 if __name__ == "__main__":
