@@ -12,3 +12,5 @@ repo
 __pycache__
 resolve.zip
 resolve-free.zip
+build-repo
+*.flatpak
